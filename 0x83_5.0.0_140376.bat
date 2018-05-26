@@ -1,0 +1,1 @@
+autorun.bat vip8022n2_0001_pid0x83 5.0.0_dev_140376 projects.v620_v7 %~1
