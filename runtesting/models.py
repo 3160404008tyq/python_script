@@ -327,13 +327,14 @@ class Tester(object):
 			self._chip		= kargs.get("chip")
 			self._driver	= os.path.join(SDK_HOME, cmodel_branch, driver_branch, version, self._chip)
 			self._savedir	= os.path.join(RESULT_HOME, "autotest", cmodel_branch, driver_branch, version, self._chip)
-			
+		
+		#用以匹配build driver时，有gcDefines_的情况
 		if not os.path.exists(self._driver):
 			self._driver = os.path.join(SDK_HOME, cmodel_branch, driver_branch, version, 'gcDefines_' + self._chip)
 			if not os.path.exists(self._driver):
 				raise ValueError("can not find driver: %s" % self._driver)
 				
-		self._workdir		= os.path.join(os.getcwd(), 'workspace')
+		self._workdir		= os.path.join(os.getcwd(), 'workspace')#组建一个由当前工作目录+workspace构成的字符串
 		self._local_driver	= os.path.join(self._workdir, cmodel_branch, driver_branch, version, self._chip)
 		self._logger		= logging.getLogger(','.join([cmodel_branch, driver_branch, version, self._chip]))
 		
@@ -345,10 +346,10 @@ class Tester(object):
 		SHELL.call("md %s" % self._savedir)
 		UT.xcopy(self._driver, self._local_driver)
 		SHELL.call("xcopy /y/q %s\\*.ini %s" % (self._driver, self._savedir))
-		os.environ['path'] = "%s;%s" % (self._local_driver, os.environ['path'])
+		os.environ['path'] = "%s;%s" % (self._local_driver, os.environ['path'])#往环境变量path里添加本地driver的路径
 		tmp = self._chip.split('_')
 		os.environ['HW_CONFIG'] = tmp[-1].replace('pid', '')
-		os.environ['VIV_VX_ENABLE_PRINT_TARGET'] = str(1)
+		os.environ['VIV_VX_ENABLE_PRINT_TARGET'] = str(1)#str(1)将数字1转换成字符串1
 		
 		with open("\\\\192.168.33.105\\data\\test_envs\\hw_configs\\latest.txt", 'r') as f:
 			latest = f.readline().strip()

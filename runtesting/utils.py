@@ -62,14 +62,14 @@ def dispatch_nn_unit_tasks(queue, category, name, c_args):
 
 	path = os.path.join(CASE_HOME, category, name)
 	tp = None
-	m = re.search(r'\-r\s+(?P<type>\w+)', c_args)
+	m = re.search(r'\-r\s+(?P<type>\w+)', c_args)#(?P<type>\w+)正则表达式中的分组，并将组名命名为type
 	if m:
 		tp = m.group('type')
 		
 	if tp is None:
-		for i in glob.glob(os.path.join(path, '*', '*', '*.exe')):
+		for i in glob.glob(os.path.join(path, '*', '*', '*.exe')):#glob.glob返回所有匹配的文件路径列表
 			t = i.split(os.sep)
-			queue.put(NN_unit_case(category, name, t[-3], t[-2]))
+			queue.put(NN_unit_case(category, name, t[-3], t[-2]))#t[-3], t[-2])是case的外层文件夹
 		return
 		
 	file = os.path.join(path, 'list_%s.txt'%tp)
