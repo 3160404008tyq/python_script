@@ -48,11 +48,11 @@ def get_tasks(task_file, max_num):
 			lines[i] = '#' + line + '\n'
 			tasks.append(line)
 			break
-		tasks.append(line)
+		tasks.append(line)#未执行的case放入到tasks
 		lines[i] = '#' + line + '\n'
 		if len(tasks) == max_num:
 			break	
-	with open(task_file, 'w') as f:
+	with open(task_file, 'w') as f:#运行了case之后，需要更新task_file中的状态
 		f.writelines(lines)
 		
 	return tasks
@@ -103,9 +103,9 @@ if __name__ == '__main__':
 	assert args.driver
 	assert os.path.exists(args.driver)
 	
-	tester = Tester(driver=args.driver)
-	tester._logger = config_logger(tester._savedir)
-	tester.init_test()
+	tester = Tester(driver=args.driver)#获取相关的drv，cmodel版本信息，及存储位置
+	tester._logger = config_logger(tester._savedir)#配置日志信息
+	tester.init_test()#设置相关环境变量
 	
 	task_file = args.task_file
 	if task_file is None:
@@ -121,7 +121,7 @@ if __name__ == '__main__':
 	jobs = queue.Queue(args.thread_num+2)
 	
 	threads = []
-	t = threading.Thread(target=get_jobs, args=(task_file, jobs, args.thread_num+2, ))
+	t = threading.Thread(target=get_jobs, args=(task_file, jobs, args.thread_num+2, ))#Thread的run方法将调用get_jobs，args将作为get_jobs的调用参数
 	t.start()
 	threads.append(t)
 
