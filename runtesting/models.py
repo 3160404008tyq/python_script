@@ -354,7 +354,7 @@ class Tester(object):
 		with open("\\\\192.168.33.105\\data\\test_envs\\hw_configs\\latest.txt", 'r') as f:
 			latest = f.readline().strip()
 		env_file = os.path.join("\\\\192.168.33.105\\data\\test_envs\\hw_configs", latest, tmp[-1].replace('pid', '')+'.sh')
-		if os.path.exists(env_file):
+		if os.path.exists(env_file):#根据env_file设置环境变量
 			with open(env_file, 'r') as f:
 				lines = f.readlines()
 			for line in lines:
