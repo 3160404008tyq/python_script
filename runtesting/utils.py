@@ -57,7 +57,7 @@ def get_sdk_version(chip, drv_branch, cmodel_branch='projects.v620_v2'):
 
 	return version
 	
-def dispatch_nn_unit_tasks(queue, category, name, c_args):
+def dispatch_nn_unit_tasks(queue, category, name, c_args):#装载case
 	import re
 
 	path = os.path.join(CASE_HOME, category, name)

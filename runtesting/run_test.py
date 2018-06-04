@@ -70,7 +70,7 @@ def get_jobs(task_file, jobs, max_num):
 				continue
 			category = tmp[0]
 			name = tmp[1]
-			c_args = ' '.join(tmp[2:])
+			c_args = ' '.join(tmp[2:])#识别case后带有参数的情况
 			if category == 'nn':
 				if name.startswith('unit_test'):
 					utils.dispatch_nn_unit_tasks(jobs, category, name, c_args)
@@ -121,12 +121,12 @@ if __name__ == '__main__':
 	jobs = queue.Queue(args.thread_num+2)
 	
 	threads = []
-	t = threading.Thread(target=get_jobs, args=(task_file, jobs, args.thread_num+2, ))#Thread的run方法将调用get_jobs，args将作为get_jobs的调用参数
+	t = threading.Thread(target=get_jobs, args=(task_file, jobs, args.thread_num+2, ))#Thread的run方法将调用get_jobs，args将作为get_jobs的调用参数；此处的Thread旨在装载要运行的case
 	t.start()
 	threads.append(t)
 
 	for i in range(args.thread_num):
-		t = threading.Thread(target=run, args=(jobs, tester, ))
+		t = threading.Thread(target=run, args=(jobs, tester, ))#此处的thread旨在运行装载好的case
 		t.start()
 		threads.append(t)
 
