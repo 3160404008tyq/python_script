@@ -143,7 +143,7 @@ def print_detail_table(wb, sheet, **kargs):
 	row = kargs.get('start_row', 16)
 	col = kargs.get('start_col', 0)
 
-	sheet.freeze_panes(row+1, 0)
+	sheet.freeze_panes(row+1, 0)#freeze_panes--冻结窗口
 	sheet.set_column(col+1, col+len(table.items)-1, 20)
 	i = 0
 	for item in table.items:
