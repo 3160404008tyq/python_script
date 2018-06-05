@@ -20,7 +20,7 @@ def results(path, file_name):
 					sheet,
 					path=path,	
 					test_env=test_env,
-					tasks=CFG.get_cases(subtest, chip),
+					tasks=CFG.get_cases(subtest, chip),#tasks是一个列表
 					category=CFG.SUBTESTS.get(subtest),
 				)
 
