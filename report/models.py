@@ -8,7 +8,7 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 from utility.sys_call import SHELL
 
-class TEST_ENV(object):
+class TEST_ENV(object):#读取配置文件
 	def __init__(self, cfg=None):
 		self.env = OrderedDict()
 		self.env['driver'] = None

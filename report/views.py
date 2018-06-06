@@ -84,7 +84,7 @@ def get_rlt_name_dir(path, task):
 
 	return [rlt_path, name]
 
-def print_head_env(wb, sheet, env, **kargs):
+def print_head_env(wb, sheet, env, **kargs):#显示测试的环境变量
 	"""
 		print test environment information
 		paramters:
@@ -139,7 +139,7 @@ def print_detail_table(wb, sheet, **kargs):
 	category = kargs.get('category', None)
 	assert category
 
-	table = TABLE(category)
+	table = TABLE(category)#根据category，选择result比较模板
 	row = kargs.get('start_row', 16)
 	col = kargs.get('start_col', 0)
 
@@ -205,7 +205,7 @@ def print_general_sheet(wb, sheet, **kargs):
 	start_row = kargs.get('start_row', 0)
 	start_col = kargs.get('start_col', 0)
 
-	sheet.set_column(start_col, start_col, 30)
+	sheet.set_column(start_col, start_col, 30)#设置行宽
 	sheet.write_url(start_row, start_col, url='internal:Summary!%s'%xl_rowcol_to_cell(start_row, start_col), string='Summary')
 
 	env_row = start_row + 1

@@ -51,7 +51,7 @@ CHIP_IGNORES = {
 	],
 }
 
-def get_cases(name, chip):
+def get_cases(name, chip):#获取某种类型test_case下的case name
 	task = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'tasks', '%s.txt'%name)
 	assert os.path.exists(task)
 	f = open(task, 'r')
@@ -70,4 +70,4 @@ def get_cases(name, chip):
 		if task in CHIP_IGNORES.get(chip, IGNORES):
 			flag = False
 		tasks.append([flag, task])
-	return tasks
+	return tasks#返回的是类似[nn,unit_test_7.1,case_name]形式的列表
