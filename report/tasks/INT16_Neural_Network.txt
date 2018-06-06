@@ -1,0 +1,3 @@
+alexnet_int16
+mobilenet_int16
+mobilenet_ssd_int16
