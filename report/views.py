@@ -100,7 +100,7 @@ def print_head_env(wb, sheet, env, **kargs):#显示测试的环境变量
 	sheet.merge_range(rg, 'Test Environment', fmts.get('head_tag'))
 	row += 1
 
-	for key in env.hierachy:
+	for key in env.hierachy if key != gcdefine else:
 		sheet.write(row, col, key, fmts.get('head_item'))
 		sheet.write(row, col+1, env.env.get(key, ''), fmts.get('com'))
 		row += 1
