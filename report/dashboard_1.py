@@ -10,6 +10,7 @@ def results(path, file_name):
 	sum_sheet = workbook.add_worksheet('Summary')
 	gcdefine_num = len(glob.glob(os.path.join(path, '*')))#获取gcdefine个数
 	
+	chipCount = 0
 	for chip in glob.glob(os.path.join(path, '*')):#vip8000_pid0x82...
 		test_env = models.TEST_ENV(os.path.join(chip, 'cfg.ini'))
 		chip = os.path.basename(chip)
@@ -25,8 +26,10 @@ def results(path, file_name):
 						gedefineNum = gcdefine_num,
 						tasks=CFG.get_cases(subtest, chip),#tasks是类似[nn,unit_test_7.1,case_name]形式的列表
 						category=CFG.SUBTESTS.get(subtest),
+						chipCount,
 					)
-
+		chipCount += 1
+		
 	views.print_summary_sheet(workbook, sum_sheet, test_env=test_env, summary=sum_info)
 	workbook.close()
 

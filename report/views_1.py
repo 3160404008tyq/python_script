@@ -132,7 +132,7 @@ def print_detail_table(wb, sheet, **kargs):
 		result summary
 	"""
 
-	rlt_sum = RLT_SUM()
+	rlt_sum = RLT_SUM()#一个status有序字典
 
 	tasks = kargs.get('tasks', [])
 	if len(tasks) == 0:
@@ -171,10 +171,13 @@ def print_detail_table(wb, sheet, **kargs):
 			ret.info['Status'] = 'NotSupport'
 
 		i = 0
+		count = 0
 		for item in table.items:
-			sheet.write(row, col+i, ret.info.get(item, ''), get_rlt_fmt(ret.info['Status'], item))
-			i += 1
-
+			if count <3:
+				sheet.write(row, col+i, ret.info.get(item, ''), get_rlt_fmt(ret.info['Status'], item))#写每个case的运行结果
+				i += 1
+				count += 1
+				
 		sts = ret.info['Status']
 		if sts not in ['Pass', 'Fail', 'Crash', 'Timeout', 'NotSupport']:
 			sts = 'Other'
@@ -193,36 +196,39 @@ def print_general_sheet(wb, sheet, **kargs):
 			start_row: the first row index to write
 			start_col: the first column index to write
 	"""
+	chipCount = kargs.get('chipCount', 0)
+	
+	if chipCount == 0:#表格的初始化操作
+	
+		fmts['Pass'] = get_format(wb, rlt_pass_fmt)
+		fmts['Fail'] = get_format(wb, rlt_fail_fmt)
+		fmts['Crash'] = get_format(wb, rlt_warn_fmt)
+		fmts['Timeout'] = get_format(wb, rlt_warn_fmt)
+		fmts['Other'] = get_format(wb, rlt_note_fmt)
+		fmts['NotSupport'] = get_format(wb, rlt_notsupport_fmt)
+		fmts['com']	= get_format(wb, gen_fmt)
+		fmts['head_tag'] = get_format(wb, head_tag_fmt)
+		fmts['head_item'] = get_format(wb, head_item_fmt)
 
-	fmts['Pass'] = get_format(wb, rlt_pass_fmt)
-	fmts['Fail'] = get_format(wb, rlt_fail_fmt)
-	fmts['Crash'] = get_format(wb, rlt_warn_fmt)
-	fmts['Timeout'] = get_format(wb, rlt_warn_fmt)
-	fmts['Other'] = get_format(wb, rlt_note_fmt)
-	fmts['NotSupport'] = get_format(wb, rlt_notsupport_fmt)
-	fmts['com']	= get_format(wb, gen_fmt)
-	fmts['head_tag'] = get_format(wb, head_tag_fmt)
-	fmts['head_item'] = get_format(wb, head_item_fmt)
+		test_env = kargs.get('test_env', None)
+		assert test_env
 
-	test_env = kargs.get('test_env', None)
-	assert test_env
+		start_row = kargs.get('start_row', 0)
+		start_col = kargs.get('start_col', 0)
+		gedefineNum = kargs.get('gedefineNum', 0)
 
-	start_row = kargs.get('start_row', 0)
-	start_col = kargs.get('start_col', 0)
-	gedefineNum = kargs.get('gedefineNum', 0)
+		sheet.set_column(start_col, start_col, 30)#设置行宽
+		sheet.write_url(start_row, start_col, url='internal:Summary!%s'%xl_rowcol_to_cell(start_row, start_col), string='Summary')
 
-	sheet.set_column(start_col, start_col, 30)#设置行宽
-	sheet.write_url(start_row, start_col, url='internal:Summary!%s'%xl_rowcol_to_cell(start_row, start_col), string='Summary')
+		env_row = start_row + 1
+		env_col = start_col
+		print_head_env(wb, sheet, env=test_env, start_row=env_row, start_col=env_col)
 
-	env_row = start_row + 1
-	env_col = start_col
-	print_head_env(wb, sheet, env=test_env, start_row=env_row, start_col=env_col)
+		sum_row = env_row + len(test_env.hierachy) + 1
+		sum_col = start_col
 
-	sum_row = env_row + len(test_env.hierachy) + 1
-	sum_col = start_col
-
-	d_row = sum_row + gedefineNum
-	d_col = start_col
+		d_row = sum_row + gedefineNum
+		d_col = start_col
 
 	ret_sum = print_detail_table(
 				wb, 
@@ -232,7 +238,9 @@ def print_general_sheet(wb, sheet, **kargs):
 				path=kargs.get('path'),
 				tasks=kargs.get('tasks'), 
 				category=kargs.get('category'), 
-				chip=test_env.env.get('gcdefine', '')
+				chip=test_env.env.get('gcdefine', '')，
+				chipCount = kargs.get('chipCount', 0)，
+				gedefineNum = kargs.get('gedefineNum')，
 			)
 
 	print_sum(wb, sheet, start_row=sum_row, start_col=sum_col, info=ret_sum.info)
