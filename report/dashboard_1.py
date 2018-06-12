@@ -22,6 +22,7 @@ def results(path, file_name):
 						sheet,
 						path=path,	
 						test_env=test_env,
+						gedefineNum = gcdefine_num,
 						tasks=CFG.get_cases(subtest, chip),#tasks是类似[nn,unit_test_7.1,case_name]形式的列表
 						category=CFG.SUBTESTS.get(subtest),
 					)
