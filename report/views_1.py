@@ -147,15 +147,33 @@ def print_detail_table(wb, sheet, **kargs):
 
 	sheet.freeze_panes(row+1, 0)#freeze_panes--冻结窗口
 	sheet.set_column(col+1, col+len(table.items)-1, 20)
+	
 	i = 0
-	count = 0#用于限制只显示Name,P4cl,Status这三列
-	for item in table.items:
-		if count <3:
-			sheet.write(row, col+i, item, fmts.get('head_tag'))
-			i += 1
-			count += 1
-	sheet.autofilter(row, col, row, col+len(table.items)-1)
-	row += 1
+	# count = 0#用于限制只显示Name,P4cl,Status这三列
+	gedefineNum = kargs.get('gedefineNum')#获取gcdefine个数
+	#构造表头结构
+	name_rg = xl_range(row,col,row+1,col)
+	p4cl_rg = xl_range(row,col+1,row+1,col+1)
+	status = xl_range(row,col+2,row,col+2+gedefineNum)
+	
+	sheet.merge_range(name_rg,'Name',fmts.get('head_tag'))
+	sheet.merge_range(p4cl_rg,'P4cl',fmts.get('head_tag'))
+	sheet.merge_range(status,'Status',fmts.get('head_tag'))
+	
+	# for item in table.items:
+		# if count <3:
+			# sheet.write(row, col+i, item, fmts.get('head_tag'))
+			# i += 1
+			# count += 1
+	#构造筛选单元格
+	sheet.autofilter(15+gedefineNum,0,15+gedefineNum,0)
+	sheet.autofilter(15+gedefineNum,1,15+gedefineNum,1)
+	
+	for j in range(gedefineNum):
+		sheet.autofilter(15+gedefineNum,2+j,15+gedefineNum,2+j)
+	
+	
+	row += 2
 
 	path = kargs.get('path', None)
 	assert path
